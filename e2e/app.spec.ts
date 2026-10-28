@@ -217,7 +217,7 @@ test("desktop visual and no client console errors", async ({ page }) => {
 });
 test("company profile links to and from the app", async ({ page }) => {
   await page.getByRole("link", { name: "Profil perusahaan →" }).click();
-  await expect(page).toHaveURL(/\/profil$/);
+  await expect(page).toHaveURL(/:\d+\/$/);
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
     "Pabrik minta",
   );

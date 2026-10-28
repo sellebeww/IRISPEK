@@ -1,6 +1,34 @@
+<div align="center">
+
+<img src="public/brand/irispek-mark.png" alt="Logo IRISPEK" width="140">
+
 # IRISPEK
 
-MVP pengadaan bersama UMKM dalam Bahasa Indonesia. Kelompok dibentuk dari irisan batas kebutuhan; setiap anggota harus memenuhi seluruh batas dan tidak boleh membayar lebih mahal daripada pesan sendiri. Tidak ada pembayaran, pengiriman nyata, atau autentikasi.
+**Pengadaan bersama yang benar-benar sesuai kebutuhan.**
+
+Simulasi pengadaan bersama untuk UMKM: mencari irisan spesifikasi dari beberapa usaha, memesannya sekali, dan memastikan setiap anggota memenuhi seluruh batasnya tanpa membayar lebih mahal daripada memesan sendiri.
+
+![Next.js](https://img.shields.io/badge/Next.js-16-000000?logo=nextdotjs&logoColor=white)
+![React](https://img.shields.io/badge/React-19-149eca?logo=react&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6?logo=typescript&logoColor=white)
+![Vitest](https://img.shields.io/badge/Vitest-50%20uji-6e9f18?logo=vitest&logoColor=white)
+![Playwright](https://img.shields.io/badge/Playwright-9%20e2e-2ead33?logo=playwright&logoColor=white)
+![Penyimpanan](https://img.shields.io/badge/penyimpanan-berkas%20lokal-0145d2)
+
+</div>
+
+---
+
+Tidak ada pembayaran, pengiriman nyata, atau autentikasi.
+
+Proyek ini berisi dua bagian dengan satu identitas visual:
+
+| Rute   | Isi                                                                           |
+| ------ | ----------------------------------------------------------------------------- |
+| `/`    | Company profile: masalah MOQ, cara kerja, janji produk, dan angka simulasi.   |
+| `/app` | Demo aplikasi: ringkasan, pembeli, pembentukan kelompok, penawaran, evaluasi. |
+
+Stack: Next.js (App Router, webpack), React, TypeScript, Tailwind CSS 4 (hanya `@import`; gaya utama berupa CSS biasa dengan design token di `globals.css`), Vitest, dan Playwright.
 
 ## Fitur utama
 
@@ -26,27 +54,29 @@ MVP pengadaan bersama UMKM dalam Bahasa Indonesia. Kelompok dibentuk dari irisan
 
 ## Menjalankan
 
-Gunakan Node.js 22+ dan npm. Dari direktori proyek, untuk pemasangan pertama dan menjalankan aplikasi dalam satu perintah:
+Butuh Node.js 22+ dan npm.
 
 ```sh
-npm install && npm run dev
+npm install
+npm run dev        # http://127.0.0.1:3000
 ```
 
-Buka http://127.0.0.1:3000. Setelah dependensi terpasang, cukup `npm run dev`.
+| Perintah            | Fungsi                                                      |
+| ------------------- | ----------------------------------------------------------- |
+| `npm test`          | Vitest: invariant solver, validasi, API, skenario S1–S6     |
+| `npm run typecheck` | TypeScript                                                  |
+| `npm run test:e2e`  | 9 tes interaksi Chrome desktop/mobile (butuh Google Chrome) |
+| `npm run build`     | Build produksi                                              |
+| `npm start`         | Server produksi setelah build                               |
+| `npm run format`    | Prettier                                                    |
 
-```sh
-npm test           # Vitest: invariant dan S1–S6
-npm run typecheck  # TypeScript
-npm run test:e2e   # 8 tes interaksi Chrome desktop/mobile
-npm run build     # build produksi
-npm start         # server produksi setelah build
-```
+## Penyimpanan data
 
-Klik **Simpan perubahan** untuk menyimpan pembeli, konfigurasi, penawaran, dan riwayat sampel ke `data/state.json`. Muat ulang browser untuk membaca kembali. Mengganti skenario mereset data aktif dan riwayat sampel dalam memori; perubahan baru permanen setelah disimpan. Penulisan file memakai temporary file + atomic rename. Penulisan dalam satu proses Node diserialkan dan dilindungi ETag/If-Match: tab yang memakai versi lama menerima HTTP 409, bukan menimpa perubahan baru. Tetap model lokal satu proses; bukan database multi-server dan tidak menjamin persistensi pada hosting ephemeral. File rusak tidak ditimpa otomatis.
+Klik **Simpan perubahan** untuk menyimpan pembeli, konfigurasi, penawaran, dan riwayat sampel ke `data/state.json`; muat ulang browser untuk membaca kembali. Mengganti skenario mereset data aktif dan riwayat sampel di memori; perubahan baru permanen setelah disimpan. Penulisan memakai file sementara + atomic rename, diserialkan dalam satu proses Node, dan dilindungi ETag/If-Match: tab dengan versi lama menerima HTTP 409, bukan menimpa perubahan baru. Ini model lokal satu proses, bukan database multi-server, dan tidak menjamin persistensi pada hosting ephemeral. File rusak tidak ditimpa otomatis.
 
-Indikator **Belum disimpan** menandai perubahan aktif, dan browser memperingatkan sebelum keluar. Ekspor/impor JSON menyediakan cadangan eksperimen; impor memvalidasi ulang kebutuhan dan snapshot biaya. **Ekspor biaya CSV** pada evaluasi memuat rincian per anggota terlayani. Anggota tidak terlayani dan alasan tetap terlihat di UI. File impor dibatasi 200 KB. Konflik tab diselesaikan dengan mengekspor perubahan lokal terlebih dahulu lalu memuat ulang data terbaru.
+Indikator **Belum disimpan** menandai perubahan aktif dan browser memperingatkan sebelum keluar. Ekspor/impor JSON menyediakan cadangan (impor memvalidasi ulang kebutuhan dan snapshot biaya, maksimum 200 KB). **Ekspor biaya CSV** pada evaluasi memuat rincian per anggota terlayani. Konflik tab diselesaikan dengan mengekspor perubahan lokal lalu memuat ulang.
 
-Tes browser memerlukan Google Chrome (`channel: chrome`). Playwright membangun produksi lalu menjalankan server terisolasi di port 3187 dengan file data di direktori sementara melalui `BATASBELI_STATE_FILE`, sehingga data pengguna di `data/state.json` tidak diubah. Tutup layanan lain pada port uji atau ubah port pada `playwright.config.ts`.
+Tes browser membangun produksi lalu menjalankan server terisolasi di port 3187 dengan file data di direktori sementara (`BATASBELI_STATE_FILE`), sehingga `data/state.json` tidak berubah. Ubah port di `playwright.config.ts` bila bentrok.
 
 ## Struktur dan model
 
@@ -54,7 +84,8 @@ Tes browser memerlukan Google Chrome (`channel: chrome`). Playwright membangun p
 - `src/domain/config.ts`: seluruh parameter biaya platform, admin, komunikasi, penalti stok, bobot deviasi, ambang penghematan, tujuan spesifikasi, dan tanggal simulasi.
 - `src/domain/seed.ts`: 10 pembeli, satu produsen, katalog diskret, tingkat harga, MOQ, biaya cetak dan pengiriman, serta skenario.
 - `src/solver/index.ts`: fungsi TypeScript murni, tidak mengimpor React, Next.js, filesystem, atau waktu sistem.
-- `src/app/page.tsx`: ringkasan, kebutuhan, kelompok manual/otomatis, penawaran/sampel, evaluasi.
+- `src/app/page.tsx` + `profil.css`: company profile (`/`).
+- `src/app/app/page.tsx`: demo aplikasi (`/app`): ringkasan, kebutuhan, kelompok manual/otomatis, penawaran/sampel, evaluasi.
 - `src/domain/validation.ts`, `state.ts`, `workflow.ts`: validasi bersama UI/API, integritas penawaran, transisi respons sampel.
 - `src/server/storage.ts`: antrean penulisan, ETag, atomic rename, dan perlindungan file rusak.
 - `src/app/api/state/route.ts`: validasi JSON, origin, batas stream 200 KB, dan konflik versi.
@@ -62,7 +93,7 @@ Tes browser memerlukan Google Chrome (`channel: chrome`). Playwright membangun p
 - `tests/audit.test.ts`, `tests/api.test.ts`, `e2e/app.spec.ts`: regresi audit dan alur browser.
 - `tests/solver.test.ts`: unit test, kasus regresi, dan 100 variasi acak deterministik.
 
-Satu kategori: kemasan kertas dengan panjang, lebar, bahan, dan jumlah warna cetak. MOQ dan biaya setup berlaku per varian; untuk MVP ini semua varian memiliki MOQ/setup sama. Alokasi dan spesifikasi disimpan di snapshot rencana penawaran. Status kelompok direpresentasikan oleh penawaran: ditawarkan, ditolak, disetujui. Kelompok yang baru disarankan belum merupakan komitmen pembelian.
+Satu kategori: kemasan kertas dengan panjang, lebar, bahan, dan jumlah warna cetak. MOQ dan biaya setup berlaku per varian; dalam simulasi ini semua varian memiliki MOQ/setup sama. Alokasi dan spesifikasi disimpan di snapshot rencana penawaran. Status kelompok direpresentasikan oleh penawaran: ditawarkan, ditolak, disetujui. Kelompok yang baru disarankan belum merupakan komitmen pembelian.
 
 ## Desain solver
 
@@ -118,7 +149,7 @@ Tabel membandingkan biaya efektif, pengadaan termasuk koordinasi/platform, biaya
 - **Penerimaan sampel:** kelayakan matematis tidak menjamin tekstur, kualitas cetak, atau pengalaman fisik diterima. S4 mencatat penolakan; tingkat penerimaan pada seed kosong belum diukur, bukan otomatis 100%.
 - **Realisme data:** angka sintetis, biaya tetap, tambahan harga hanya bergantung bahan, kebutuhan tidak berubah selama satu run. Tidak membuktikan perilaku atau penghematan pembeli nyata. Wawancara pembeli diperlukan untuk membedakan batas wajib dan preferensi, serta mengukur waktu koordinasi dan risiko stok.
 - **Uji inti:** seluruh anggota keluaran solver harus memenuhi semua batas dan memiliki biaya efektif <= sendiri. Pengujian 100 variasi deterministik memeriksa invariant ini. Gunakan `minimumSaving > 0` bila definisi keberhasilan mensyaratkan **lebih rendah**, bukan sama.
-- **Batas MVP:** tidak ada pajak, optimasi rute, kapasitas produksi, toleransi proses, banyak produsen, audit identitas, atau pembayaran. Respons penawaran ditolak jika melewati masa berlaku berdasarkan tanggal simulasi; tidak ada penjadwal waktu nyata, dan mengubah tanggal simulasi membatalkan penawaran aktif. Jangan gunakan sebagai sistem transaksi produksi.
+- **Batas simulasi:** tidak ada pajak, optimasi rute, kapasitas produksi, toleransi proses, banyak produsen, audit identitas, atau pembayaran. Respons penawaran ditolak jika melewati masa berlaku berdasarkan tanggal simulasi; tidak ada penjadwal waktu nyata, dan mengubah tanggal simulasi membatalkan penawaran aktif. Jangan gunakan sebagai sistem transaksi produksi.
 
 ## Hasil verifikasi seed
 
@@ -146,10 +177,10 @@ Batas yang masih disengaja: data sintetis, satu proses lokal, maksimum 10 pembel
 ### Hasil pemeriksaan terakhir
 
 - **50 tes unit/API lulus**, termasuk 100 variasi deterministik pada tes invariant solver.
-- **8 tes E2E Chrome lulus pada build produksi**, mencakup desktop dan viewport seluler 390 px.
+- **9 tes E2E Chrome lulus pada build produksi**, mencakup desktop dan viewport seluler 390 px.
 - Build produksi menyelesaikan kompilasi dan pemeriksaan TypeScript.
 - `npm audit`: **0 kerentanan terlapor** pada dependency tree saat audit.
 - Screenshot pemeriksaan tersedia setelah `npm run test:e2e` di `test-results/desktop-overview.png` dan `test-results/mobile-overview.png` (artefak lokal yang diabaikan Git).
 - Hasil seed S1–S6 tetap sesuai tabel di atas; penghematan seluruh anggota dan pelaporan kasus tidak hemat dipertahankan.
 
-Hasil tes membuktikan kasus yang diuji, bukan jaminan tanpa bug untuk seluruh input atau kesiapan transaksi produksi. Penyimpanan multi-proses, autentikasi nyata, dan validasi data UMKM lapangan tetap di luar MVP.
+Hasil tes membuktikan kasus yang diuji, bukan jaminan tanpa bug untuk seluruh input atau kesiapan transaksi produksi. Penyimpanan multi-proses, autentikasi nyata, dan validasi data UMKM lapangan tetap di luar cakupan.

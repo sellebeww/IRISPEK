@@ -512,7 +512,11 @@ export default function Home() {
   return (
     <div className="shell">
       <aside>
-        <a className="brand" href="/app" aria-label="IRISPEK — beranda aplikasi">
+        <a
+          className="brand"
+          href="/app"
+          aria-label="IRISPEK — beranda aplikasi"
+        >
           <Image
             className="brand-mark"
             src="/brand/irispek-mark.png"
@@ -1377,7 +1381,7 @@ export default function Home() {
             <a className="text-button" href="/">
               Profil perusahaan →
             </a>
-            <small>MVP · tanpa pembayaran nyata</small>
+            <small>Simulasi · tanpa pembayaran nyata</small>
           </footer>
         </div>
       </main>

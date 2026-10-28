@@ -405,8 +405,8 @@ export default function Profile() {
           height={751}
         />
         <p>
-          IRISPEK, dari <em>irisan spesifikasi</em>. Versi MVP untuk simulasi;
-          tidak ada pembayaran atau pengiriman nyata.
+          IRISPEK, dari <em>irisan spesifikasi</em>. Ini simulasi: tanpa
+          pembayaran atau pengiriman nyata.
         </p>
         <nav aria-label="Tautan bawah">
           <Link href="/app">Aplikasi</Link>

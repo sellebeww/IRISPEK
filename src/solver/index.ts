@@ -262,7 +262,7 @@ export function solveGroup(
   return issues.length ? { issues } : { plan, issues };
 }
 export function solvePartition(bs: Buyer[], p: Producer, c: Config) {
-  if (bs.length > 10) throw new Error("MVP mendukung maksimal 10 pembeli.");
+  if (bs.length > 10) throw new Error("Maksimal 10 pembeli didukung.");
   if (new Set(bs.map((b) => b.id)).size !== bs.length)
     throw new Error("ID pembeli harus unik.");
   const soloCache = new Map<string, Plan>();
